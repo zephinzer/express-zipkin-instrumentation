@@ -43,7 +43,6 @@ jobs:
         './package.json',\n\
         JSON.stringify(packageJson, null, 2)\n\
       ); \n\" > ./version-bump.js;
-    - printf -- "Published:         $(node ./version-bump.js)";
-    - rm -rf ./version-bump.js;
+    - node ./version-bump.js;
     - npm publish;
     - rm -rf ~/.npmrc;
