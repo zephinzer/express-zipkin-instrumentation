@@ -3,6 +3,7 @@
   "version": "1.0.3",
   "description": "Convenience package for instrumenting an Express application with Zipkin request tracing used in the MCF project.",
   "main": "index.js",
+  "private": false,
   "scripts": {
     "test": "mocha \"./test.index.js\" \"./index.test.js\"",
     "version-get": "docker run -v \"$(pwd):/app\" zephinzer/vtscripts:latest get-latest -q",
