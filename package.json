@@ -1,0 +1,34 @@
+{
+  "name": "@govtechsg/express-zipkin-instrumentation",
+  "version": "1.0.0",
+  "description": "Convenience package for instrumenting an Express application with Zipkin request tracing used in the MCF project.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha \"./test.index.js\" \"./index.test.js\"",
+    "version-get": "docker run -v \"$(pwd):/app\" zephinzer/vtscripts:latest get-latest -q",
+    "version-patch-bump": "docker run -v \"$(pwd):/app\" zephinzer/vtscripts:latest iterate patch -q",
+    "version-minor-bump": "docker run -v \"$(pwd):/app\" zephinzer/vtscripts:latest iterate minor -q",
+    "version-major-bump": "docker run -v \"$(pwd):/app\" zephinzer/vtscripts:latest iterate major -q"
+  },
+  "author": "GovTech",
+  "contributors": [
+    {
+      "name": "zephinzer",
+      "url": "https://github.com/zephinzer"
+    }
+  ],
+  "license": "See LICENSE",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.0.5",
+    "sinon": "^4.5.0",
+    "sinon-chai": "^3.0.0"
+  },
+  "dependencies": {
+    "express": "^4.16.3",
+    "zipkin": "^0.12.0",
+    "zipkin-context-cls": "^0.11.0",
+    "zipkin-instrumentation-express": "^0.12.0",
+    "zipkin-transport-http": "^0.12.0"
+  }
+}
