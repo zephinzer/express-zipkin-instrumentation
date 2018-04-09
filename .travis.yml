@@ -2,10 +2,6 @@ sudo: required
 language: node_js
 node_js:
   - "lts/*"
-notifications:
-  email:
-    recipients:
-    - "${MAINTAINER_EMAIL}"
 services:
   - docker
 stages:
