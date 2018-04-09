@@ -8,9 +8,6 @@ stages:
   - test
   - release
   - publish
-branches:
-  except:
-    - /^[0-9]+\.[0-9]+\.[0-9]+$/
 jobs:
   include:
   - stage: test
