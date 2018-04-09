@@ -33,12 +33,13 @@ jobs:
     script:
     - printf -- "//${NPM_REGISTRY_URL}/:_authToken=${NPM_TOKEN}" > ~/.npmrc;
     - CURR_VERSION="$(npm run version-get)";
+    - echo ${CURR_VERSION}
     - cp ./package.json ./package.template.json;
     - |
       printf -- "
       const fs = require('fs');\n
       let packageJson = require('./package.template.json');\n
-      packageJson.version = '${CURR_VERSION}';\n
+      packageJson.version = \"${CURR_VERSION}\";\n
       fs.writeFileSync(\n
         './package.json',\n
         JSON.stringify(packageJson, null, 2)\n
