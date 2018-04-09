@@ -42,8 +42,8 @@ jobs:
       fs.writeFileSync(\n\
         './package.json',\n\
         JSON.stringify(packageJson, null, 2)\n\
-      ); \n\" > ${CURR_DIR}/version-bump.js;
-    - printf -- "Published:         $(node ${CURR_DIR}/version-bump.js)";
-    - rm -rf ${CURR_DIR}/version-bump.js;
+      ); \n\" > ./version-bump.js;
+    - printf -- "Published:         $(node ./version-bump.js)";
+    - rm -rf ./version-bump.js;
     - npm publish;
     - rm -rf ~/.npmrc;
