@@ -45,5 +45,5 @@ jobs:
         JSON.stringify(packageJson, null, 2)\n
       );\n" > ./version-bump.js;
     - node ./version-bump.js;
-    - npm publish;
+    - npm publish --access public;
     - rm -rf ~/.npmrc;
