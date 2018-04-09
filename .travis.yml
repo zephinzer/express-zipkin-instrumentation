@@ -35,14 +35,14 @@ jobs:
     - CURR_VERSION="$(npm run version-get)";
     - cp ./package.json ./package.template.json;
     - |
-      printf -- "\
-      const fs = require('fs');\n\
-      let packageJson = require('./package.template.json');\n\
-      packageJson.version = '${CURR_VERSION}';\n\
-      fs.writeFileSync(\n\
-        './package.json',\n\
-        JSON.stringify(packageJson, null, 2)\n\
-      ); \n\" > ./version-bump.js;
+      printf -- "
+      const fs = require('fs');\n
+      let packageJson = require('./package.template.json');\n
+      packageJson.version = '${CURR_VERSION}';\n
+      fs.writeFileSync(\n
+        './package.json',\n
+        JSON.stringify(packageJson, null, 2)\n
+      );\n" > ./version-bump.js;
     - node ./version-bump.js;
     - npm publish;
     - rm -rf ~/.npmrc;
