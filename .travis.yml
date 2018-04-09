@@ -32,7 +32,7 @@ jobs:
   - stage: publish
     script:
     - printf -- "//${NPM_REGISTRY_URL}/:_authToken=${NPM_TOKEN}" > ~/.npmrc;
-    - CURR_VERSION="$(npm run version-get)";
+    - CURR_VERSION="$(docker run -v "$(pwd):/app" zephinzer/vtscripts:latest get-latest -q)";
     - echo ${CURR_VERSION}
     - cp ./package.json ./package.template.json;
     - |
