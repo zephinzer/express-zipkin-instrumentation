@@ -20,26 +20,38 @@ describe('@govtechsg/mcf-zipkin-instrumentation', () => {
       'createInstance',
       '_recorder',
       'createRecorder',
+      'createServiceId',
     ]);
   });
 
   describe('.constructor()', () => {
+    let createServiceId = null;
+    let createServiceIdSpy = null;
+    
     before(() => {
       sinon.stub(zipkinMiddleware, 'createContext');
-      sinon.stub(zipkinMiddleware, 'createRecorder');
       sinon.stub(zipkinMiddleware, 'createInstance');
+      sinon.stub(zipkinMiddleware, 'createRecorder');
+      createServiceId = zipkinMiddleware.createServiceId;
+      createServiceIdSpy = sinon.spy();
+      zipkinMiddleware.createServiceId = (...args) => {
+        createServiceIdSpy.apply(null, [...args])
+        return createServiceId.apply(null, [...args]);
+      };
     });
 
     after(() => {
       zipkinMiddleware.createContext.restore();
       zipkinMiddleware.createInstance.restore();
       zipkinMiddleware.createRecorder.restore();
+      zipkinMiddleware.createServiceId = createServiceId;
     });
-
+    
     afterEach(() => {
       zipkinMiddleware.createContext.resetHistory();
       zipkinMiddleware.createInstance.resetHistory();
       zipkinMiddleware.createRecorder.resetHistory();
+      createServiceIdSpy.resetHistory();
     });
 
     it('returns a singleton instance', () => {
@@ -123,6 +135,21 @@ describe('@govtechsg/mcf-zipkin-instrumentation', () => {
 
     it('returns an instance of ConsoleRecorder if hostname is not specified', () => {
       expect(zipkinMiddleware.createRecorder()).to.be.instanceof(ConsoleRecorder);
+    });
+  });
+
+  describe('.createServiceId()', () => {
+    it('exports a function', () => {
+      expect(zipkinMiddleware.createServiceId).to.be.a('function');
+    });
+
+    it('does not add a postfix if no service name postfix is specified', () => {
+      expect(zipkinMiddleware.createServiceId('x')).to.eql('x');
+    });
+
+    it('combines a service name with its postfix in dashed case', () => {
+      expect(zipkinMiddleware.createServiceId('x', 'y')).to.eql('x-y');
+      expect(zipkinMiddleware.createServiceId('x-y', 'z')).to.eql('x-y-z');
     });
   });
 });

@@ -1,6 +1,6 @@
 {
   "name": "@govtechsg/express-zipkin-instrumentation",
-  "version": "1.0.3",
+  "version": "1.0.0",
   "description": "Convenience package for instrumenting an Express application with Zipkin request tracing used in the MCF project.",
   "main": "index.js",
   "private": false,
