@@ -8,18 +8,57 @@ npm add @govtechsg/express-zipkin-instrumentation --save;
 
 ## Usage
 
+### API
+
+Use the following to include the package:
+
+```javascript
+const expressZipkinInstrumentation = require('@govtechsg/express-zipkin-instrumentation');
+```
+
+The `expressZipkinInstrumentation` variable will be a function that returns the correct middleware. The arguments are:
+
+- `:serviceName`
+- `:zipkinHostname`
+- `:options` (optional)
+
+`:serviceName` identifies the current application in the zipkin dashboard.
+
+`:zipkinHostname` is the hostname for the zipkin server. When this is set to `null` (the default behaviour if this is not specified), the trace logs will be routed to `stdout` instead via `console.trace`.
+
+`:options` is an object that can contain the following properties:
+
+- `:serviceNamePostfix`: this will be appended to the `:serviceName` parameter in dashed-case.
+
+### Basic
 ```javascript
 const server = express();
 // ...
-const expressZipkinInstrumentation = require('express-zipkin-instrumentation');
+const expressZipkinInstrumentation = require('@govtechsg/express-zipkin-instrumentation');
 server.use(expressZipkinInstrumentation(
-  'serviceName',
-  'http://zipkin.yourdomain.com'
+  'service-name',
+  'http://zipkin.yourdomain.com',
 ))
 ```
 
-- `"serviceName"` is the identifier of the application
-- `"http://zipkin.yourdomain.com"` is the domain of the zipkin server. When this is not specified, the instrumentation will send the logs to the trace.
+> The above will result in a service identified in the Zipkin dashboard as `service-name`.
+
+### Complete
+```javascript
+const server = express();
+// ...
+const expressZipkinInstrumentation = require('@govtechsg/express-zipkin-instrumentation');
+server.use(expressZipkinInstrumentation(
+  'service-name',
+  'http://zipkin.yourdomain.com',
+  {
+    serviceNamePostfix: 'development'
+  }
+))
+```
+
+> The above will result in a service identified in the Zipkin dashboard as `service-name-development`.
+
 
 ## Development
 ### Testing
