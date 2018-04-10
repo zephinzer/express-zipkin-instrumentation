@@ -8,13 +8,13 @@ stages:
   - test
   - release
   - publish
-if: branch = master
 jobs:
   include:
   - stage: test
     script:
     - npm run test
   - stage: release
+    if: branch = master
     script:
     - git log -n 1 --format='%s' > ./.commit_message;
     - git log -n 1 --format='%H' > ./.commit_hash;
@@ -31,6 +31,7 @@ jobs:
         git push origin "${TRAVIS_BRANCH}" --tags;
       fi;
   - stage: publish
+    if: branch = master
     script:
     - git checkout master
     - git fetch
