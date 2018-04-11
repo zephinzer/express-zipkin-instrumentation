@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-npm add @govtechsg/express-zipkin-instrumentation --save;
+npm add express-zipkin-instrumentation --save;
 ```
 
 ## Usage
@@ -13,7 +13,7 @@ npm add @govtechsg/express-zipkin-instrumentation --save;
 Use the following to include the package:
 
 ```javascript
-const expressZipkinInstrumentation = require('@govtechsg/express-zipkin-instrumentation');
+const expressZipkinInstrumentation = require('express-zipkin-instrumentation');
 ```
 
 The `expressZipkinInstrumentation` variable will be a function that returns the correct middleware. The arguments are:
@@ -34,7 +34,7 @@ The `expressZipkinInstrumentation` variable will be a function that returns the 
 ```javascript
 const server = express();
 // ...
-const expressZipkinInstrumentation = require('@govtechsg/express-zipkin-instrumentation');
+const expressZipkinInstrumentation = require('express-zipkin-instrumentation');
 server.use(expressZipkinInstrumentation(
   'service-name',
   'http://zipkin.yourdomain.com',
@@ -47,7 +47,7 @@ server.use(expressZipkinInstrumentation(
 ```javascript
 const server = express();
 // ...
-const expressZipkinInstrumentation = require('@govtechsg/express-zipkin-instrumentation');
+const expressZipkinInstrumentation = require('express-zipkin-instrumentation');
 server.use(expressZipkinInstrumentation(
   'service-name',
   'http://zipkin.yourdomain.com',
