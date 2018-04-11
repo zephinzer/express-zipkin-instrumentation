@@ -35,8 +35,9 @@ jobs:
     script:
     - git checkout master
     - git fetch
-    - printf -- "//${NPM_REGISTRY_URL}/:_authToken=${NPM_TOKEN}" > ~/.npmrc;
-    - CURR_VERSION="$(docker run -v "$(pwd):/app" zephinzer/vtscripts:latest get-latest -q)";
+    - printf -- "//${NPM_REGISTRY_URL}/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+    - CURR_VERSION="$(docker run -v "$(pwd):/app" zephinzer/vtscripts:latest get-latest -q)"
+    - PACKAGE_NAME="${NPM_PACKAGE_PUBLISH_NAME}"
     - echo ${CURR_VERSION}
     - cp ./package.json ./package.template.json;
     - |
@@ -44,6 +45,7 @@ jobs:
       const fs = require('fs');\n
       let packageJson = require('./package.template.json');\n
       packageJson.version = \"${CURR_VERSION}\";\n
+      packageJson.name = \"${PACKAGE_NAME}\";\n
       fs.writeFileSync(\n
         './package.json',\n
         JSON.stringify(packageJson, null, 2)\n

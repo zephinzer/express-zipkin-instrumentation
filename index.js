@@ -32,7 +32,7 @@ function zipkinMiddleware(
     serviceNamePostfix = null,
   } = {}
 ) {
-  if (zipkinMiddleware._instance === null) {
+  if (!zipkinMiddleware._instance) {
     const serviceId = zipkinMiddleware.createServiceId(serviceName, serviceNamePostfix);
     zipkinMiddleware._context = zipkinMiddleware.createContext(serviceId);
     zipkinMiddleware._recorder = zipkinMiddleware.createRecorder(zipkinHostname);
@@ -80,3 +80,12 @@ zipkinMiddleware.createRecorder =
       })
   );
 zipkinMiddleware.getRecorder = () => zipkinMiddleware._recorder;
+
+zipkinMiddleware.getTraceId = () =>
+  zipkinMiddleware._context.getContext().traceId;
+
+zipkinMiddleware.getSpanId = () =>
+  zipkinMiddleware._context.getContext().spanId;
+
+zipkinMiddleware.getParentId = () =>
+  zipkinMiddleware._context.getContext().parentId;

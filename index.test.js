@@ -1,4 +1,5 @@
 const express = require('express');
+const supertest = require('supertest');
 const {
   BatchRecorder,
   ConsoleRecorder,
@@ -24,6 +25,9 @@ describe('mcf-zipkin-instrumentation', () => {
       'getContext',
       'getInstance',
       'getRecorder',
+      'getTraceId',
+      'getParentId',
+      'getSpanId',
     ]);
   });
 
@@ -157,6 +161,17 @@ describe('mcf-zipkin-instrumentation', () => {
   });
 
   describe('.getContext()', () => {
+    let zipkinMiddlewareContext;
+
+    before(() => {
+      zipkinMiddlewareContext = zipkinMiddleware._context;
+      zipkinMiddleware._context = '_context';
+    });
+
+    after(() => {
+      zipkinMiddleware._context = zipkinMiddlewareContext;
+    });
+
     it('works as expected', () => {
       zipkinMiddleware._context = '_context';
       expect(zipkinMiddleware.getContext()).to.eql('_context');
@@ -164,16 +179,111 @@ describe('mcf-zipkin-instrumentation', () => {
   });
   
   describe('.getInstance()', () => {
-    it('works as expected', () => {
+    let zipkinMiddlewareInstance;
+
+    before(() => {
+      zipkinMiddlewareInstance = zipkinMiddleware._instance;
       zipkinMiddleware._instance = '_instance';
+    });
+
+    after(() => {
+      zipkinMiddleware._instance = zipkinMiddlewareInstance;
+    });
+
+    it('works as expected', () => {
       expect(zipkinMiddleware.getInstance()).to.eql('_instance');
     });
   });
   
   describe('.getRecorder()', () => {
-    it('works as expected', () => {
+    let zipkinMiddlewareRecorder;
+
+    before(() => {
+      zipkinMiddlewareRecorder = zipkinMiddleware._recorder;
       zipkinMiddleware._recorder = '_recorder';
+    });
+
+    after(() => {
+      zipkinMiddleware._recorder = zipkinMiddlewareRecorder;
+    });
+
+    it('works as expected', () => {
       expect(zipkinMiddleware.getRecorder()).to.eql('_recorder');
+    });
+  });
+
+  describe('.getTraceId()', () => {
+    let server;
+
+    before(() => {
+      server = express();
+      server.use(zipkinMiddleware('_test_serviceName', '_test_hostname'));
+      sinon.stub(global.console, 'info');
+    });
+
+    after(() => {
+      global.console.info.restore();
+    });
+
+    it('returns the trace ID for the current request', () => {
+      server.use((req, res) => res.json(zipkinMiddleware.getTraceId()));
+      return supertest(server)
+        .get('/')
+        .expect(200)
+        .then((res) => {
+          expect(res.body).to.be.a('string');
+          expect(res.body).to.match(/[0-9a-f]{16}/gi);
+        });
+    });
+  });
+
+  describe('.getSpanId()', () => {
+    let server;
+
+    before(() => {
+      server = express();
+      server.use(zipkinMiddleware('_test_serviceName', '_test_hostname'));
+      sinon.stub(global.console, 'info');
+    });
+
+    after(() => {
+      global.console.info.restore();
+    });
+
+    it('returns the span ID for the current request', () => {
+      server.use((req, res) => res.json(zipkinMiddleware.getSpanId()));
+      return supertest(server)
+        .get('/')
+        .expect(200)
+        .then((res) => {
+          expect(res.body).to.be.a('string');
+          expect(res.body).to.match(/[0-9a-f]{16}/gi);
+        });
+    });
+  });
+
+  describe('.getParentId()', () => {
+    let server;
+
+    before(() => {
+      server = express();
+      server.use(zipkinMiddleware('_test_serviceName', '_test_hostname'));
+      sinon.stub(global.console, 'info');
+    });
+
+    after(() => {
+      global.console.info.restore();
+    });
+
+    it('returns the span ID for the current request', () => {
+      server.use((req, res) => res.json(zipkinMiddleware.getParentId()));
+      return supertest(server)
+        .get('/')
+        .expect(200)
+        .then((res) => {
+          expect(res.body).to.be.a('string');
+          expect(res.body).to.match(/[0-9a-f]{16}/gi);
+        });
     });
   });
 });
