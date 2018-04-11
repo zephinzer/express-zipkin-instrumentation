@@ -7,7 +7,7 @@ const ContextCLS = require('zipkin-context-cls');
 
 const zipkinMiddleware = require('./');
 
-describe('@govtechsg/mcf-zipkin-instrumentation', () => {
+describe('mcf-zipkin-instrumentation', () => {
   it('exports a function', () => {
     expect(zipkinMiddleware).to.be.a('function');
   });
@@ -21,6 +21,9 @@ describe('@govtechsg/mcf-zipkin-instrumentation', () => {
       '_recorder',
       'createRecorder',
       'createServiceId',
+      'getContext',
+      'getInstance',
+      'getRecorder',
     ]);
   });
 
@@ -150,6 +153,27 @@ describe('@govtechsg/mcf-zipkin-instrumentation', () => {
     it('combines a service name with its postfix in dashed case', () => {
       expect(zipkinMiddleware.createServiceId('x', 'y')).to.eql('x-y');
       expect(zipkinMiddleware.createServiceId('x-y', 'z')).to.eql('x-y-z');
+    });
+  });
+
+  describe('.getContext()', () => {
+    it('works as expected', () => {
+      zipkinMiddleware._context = '_context';
+      expect(zipkinMiddleware.getContext()).to.eql('_context');
+    });
+  });
+  
+  describe('.getInstance()', () => {
+    it('works as expected', () => {
+      zipkinMiddleware._instance = '_instance';
+      expect(zipkinMiddleware.getInstance()).to.eql('_instance');
+    });
+  });
+  
+  describe('.getRecorder()', () => {
+    it('works as expected', () => {
+      zipkinMiddleware._recorder = '_recorder';
+      expect(zipkinMiddleware.getRecorder()).to.eql('_recorder');
     });
   });
 });
